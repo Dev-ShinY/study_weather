@@ -113,7 +113,16 @@ export default function TodayWeather() {
   }, []);
 
   return (
-    <div className={clsx("p-5", "flex", "flex-col", "items-center")}>
+    <div
+      className={clsx(
+        "p-5",
+        "flex",
+        "flex-col",
+        "items-center",
+        "justify-center",
+        "relative"
+      )}
+    >
       <div
         className={clsx(
           "rounded-full",
@@ -132,7 +141,47 @@ export default function TodayWeather() {
       >
         <img src={weatherImages[weatherCode].image} alt="weatherImages" />
 
-      <div className={clsx("mt-10")}></div>
+        <div className={clsx("absolute", "right-10")}>
+          <div
+            className={clsx(
+              "font-thin",
+              "text-sm",
+              "rounded-full",
+              "px-5",
+              "py-3",
+              "mb-5",
+              "shadow-sm"
+            )}
+            style={{ background: "rgba(255, 255, 255, 0.9)" }}
+          >
+            오늘 일출 시간
+            <div className={clsx("text-right")}>
+              {sunTime[0].slice(0, 2) + "시 " + sunTime[1].slice(2) + "분"}
+            </div>
+          </div>
+          <div
+            className={clsx(
+              "font-thin",
+              "text-sm",
+              "rounded-full",
+              "px-5",
+              "py-3",
+              "shadow-sm"
+            )}
+            style={{ background: "rgba(255, 255, 255, 0.9)" }}
+          >
+            오늘 일몰 시간
+            <div className={clsx("text-right")}>
+              {sunTime[1].slice(0, 2) + "시 " + sunTime[1].slice(2) + "분"}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className={clsx("mt-5", "text-gray-400", "tracking-wider", "text-xl")}
+      >
+        {"현재 날씨는 " + weatherImages[weatherCode].title}
+      </div>
     </div>
   );
 }
