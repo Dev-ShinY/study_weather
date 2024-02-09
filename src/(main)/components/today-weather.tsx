@@ -70,7 +70,7 @@ export default function TodayWeather() {
 
   // 날씨
   const fetchShortWeather = async () => {
-    const fcstTime = String((new Date().getHours() + 1) * 100);
+    const fcstTime = String((new Date().getHours() + 1) * 100).padStart(4, "0");
 
     try {
       const res = await getShortWeather();
