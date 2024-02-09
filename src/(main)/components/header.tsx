@@ -1,12 +1,34 @@
 import clsx from "clsx";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import locationImage from "../../images/location.png";
+import { getGeoLoc } from "../../api/getGeoLoc";
+import { getAddress } from "../../api/getAddress";
 
 export default function Header() {
-  const [loc, setLoc] = useState(null);
+  const [loc, setLoc] = useState([0, 0]);
+  const [address, setAddress] = useState<string[]>([
+    "대전광역시",
+    "유성구",
+    "상대동",
+  ]); // dummy data
   let temp = 0;
   let low = 0;
   let high = 0;
+
+  // 위도, 경도
+  const fetchLoc = useCallback(async () => {
+    try {
+      const res = await getGeoLoc();
+      setLoc(res);
+      setAddress(await getAddress(loc[0], loc[1]));
+    } catch (error) {
+      setLoc([37.5796, 126.977]);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchLoc();
+  }, [fetchLoc]);
 
   return (
     <div
@@ -28,9 +50,12 @@ export default function Header() {
               src={locationImage}
               alt="위치 탐색"
               className={clsx("object-cover", "h-5", "cursor-pointer")}
+              onClick={fetchLoc}
             />
           </p>
-          <p className={clsx("font-bold")}>{loc ? loc : "Null"}</p>
+          <p className={clsx("font-bold")}>
+            {address ? address.join(" ") : "Null"}
+          </p>
         </div>
 
         {/* 기온 */}
