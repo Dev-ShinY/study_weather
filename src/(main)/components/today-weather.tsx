@@ -15,18 +15,45 @@ export default function TodayWeather() {
 
   // images file
   const weatherImages = [
-    require("../../images/weather/rain.png"),
-    require("../../images/weather/rain-snow.png"),
-    require("../../images/weather/snow.png"),
-    require("../../images/weather/sometimes-rain.png"),
-    "",
-    require("../../images/weather/sometimes-rain-snow.png"),
-    require("../../images/weather/sometimes-snow.png"),
-    require("../../images/weather/clear-day.png"),
-    require("../../images/weather/clear-night.png"),
-    require("../../images/weather/cloudy-day.png"),
-    require("../../images/weather/cloudy-night.png"),
-    require("../../images/weather/cloud.png"),
+    { image: require("../../images/weather/rain.png"), title: "비가 내려요" },
+    {
+      image: require("../../images/weather/rain-snow.png"),
+      title: "비와 눈이 내려요",
+    },
+    { image: require("../../images/weather/snow.png"), title: "눈이 내려요" },
+    {
+      image: require("../../images/weather/sometimes-rain.png"),
+      title: "빗방울이 내려요",
+    },
+    { image: "dummy", title: "dummy" },
+    {
+      image: require("../../images/weather/sometimes-rain-snow.png"),
+      title: "빗방울과 눈날림이 있어요",
+    },
+    {
+      image: require("../../images/weather/sometimes-snow.png"),
+      title: "눈날림이 있어요",
+    },
+    {
+      image: require("../../images/weather/clear-day.png"),
+      title: "맑은 날이에요",
+    },
+    {
+      image: require("../../images/weather/clear-night.png"),
+      title: "맑은 밤이에요",
+    },
+    {
+      image: require("../../images/weather/cloudy-day.png"),
+      title: "구름이 많이 낀 날이에요",
+    },
+    {
+      image: require("../../images/weather/cloudy-night.png"),
+      title: "구름이 많이 낀 밤이에요",
+    },
+    {
+      image: require("../../images/weather/cloud.png"),
+      title: "전체적으로 흐려요",
+    },
   ];
 
   const [weatherCode, setWeatherCode] = useState<number>(0);
@@ -103,8 +130,7 @@ export default function TodayWeather() {
           "items-center"
         )}
       >
-        <img src={weatherImages[weatherCode]} alt="weatherImages" />
-      </div>
+        <img src={weatherImages[weatherCode].image} alt="weatherImages" />
 
       <div className={clsx("mt-10")}></div>
     </div>
