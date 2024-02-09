@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import { getSunTime } from "../../api/getSunTime"; // sun rise, sun set
-import { getShortWeather } from "../../api/getShortWeather"; // sun rise, sun set
+import { getShortWeather } from "../../api/getShortWeather"; // weather forecast
 
 export default function TodayWeather() {
   // sun time
