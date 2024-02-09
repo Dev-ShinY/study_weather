@@ -6,7 +6,7 @@ type WeatherItem = {
   category: string;
   fcstDate: string;
   fcstTime: string;
-  fcstValue: number;
+  fcstValue: string;
   nx: number;
   ny: number;
 };
@@ -20,7 +20,7 @@ const numOfRows = "1000";
 const pageNo = "1";
 const baseDate = new Date().toISOString().slice(0, 10).replace(/-/g, "");
 const baseTime = `${String(new Date().getHours()).padStart(2, "0")}${String(
-  Math.floor(new Date().getMinutes() / 30) * 30
+  (Math.floor(new Date().getMinutes() / 30) - 1) * 30
 ).padStart(2, "0")}`;
 const nx = "55";
 const ny = "127";
@@ -32,7 +32,6 @@ const generateApiUrl = (): string => {
     throw new Error("API URL or API Key is not defined");
   }
   const queryParams = new URLSearchParams({
-    serviceKey: apiKey,
     numOfRows,
     pageNo,
     base_date: baseDate,
@@ -41,7 +40,7 @@ const generateApiUrl = (): string => {
     ny,
     dataType,
   });
-  return `${apiUrl}?${queryParams.toString()}`;
+  return `${apiUrl}/getUltraSrtFcst?serviceKey=${apiKey}&${queryParams.toString()}`;
 };
 
 // req

@@ -19,6 +19,7 @@ export default function TodayWeather() {
     require("../../images/weather/rain-snow.png"),
     require("../../images/weather/snow.png"),
     require("../../images/weather/sometimes-rain.png"),
+    "",
     require("../../images/weather/sometimes-rain-snow.png"),
     require("../../images/weather/sometimes-snow.png"),
     require("../../images/weather/clear-day.png"),
@@ -28,7 +29,7 @@ export default function TodayWeather() {
     require("../../images/weather/cloud.png"),
   ];
 
-  let weatherCode: number | undefined = 0;
+  const [weatherCode, setWeatherCode] = useState<number>(0);
 
   // 출몰시간
   const fetchSunTime = async () => {
@@ -52,23 +53,23 @@ export default function TodayWeather() {
       const skyCode = res.find(
         (item) => item.fcstTime === fcstTime && item.category === "SKY"
       )?.fcstValue;
-      if (ptyCode != 0) {
-        weatherCode = ptyCode;
+      if (ptyCode !== "0") {
+        setWeatherCode(parseInt(String(ptyCode)) - 1);
       } else {
         switch (skyCode) {
-          case 1:
+          case "1":
             parseInt(sunTime[0]) < nowTime && nowTime < parseInt(sunTime[1])
-              ? (weatherCode = 8)
-              : (weatherCode = 9);
+              ? setWeatherCode(8)
+              : setWeatherCode(7);
             break;
-          case 3:
+          case "3":
             parseInt(sunTime[0]) < nowTime && nowTime < parseInt(sunTime[1])
-              ? (weatherCode = 10)
-              : (weatherCode = 11);
+              ? setWeatherCode(10)
+              : setWeatherCode(9);
             break;
 
-          case 4:
-            weatherCode = 12;
+          case "4":
+            setWeatherCode(11);
             break;
           default:
             break;
@@ -102,10 +103,10 @@ export default function TodayWeather() {
           "items-center"
         )}
       >
-        <img src={weatherImages[0]} alt="weatherImages" />
+        <img src={weatherImages[weatherCode]} alt="weatherImages" />
       </div>
 
-      <div className={clsx("mt-10")}>{nowTime}</div>
+      <div className={clsx("mt-10")}></div>
     </div>
   );
 }
