@@ -1,4 +1,5 @@
 import axios from "axios";
+import proj4 from "proj4";
 
 type WeatherItem = {
   baseDate: string;
@@ -96,4 +97,77 @@ export const getTemp = async () => {
     );
     return data.map((item: { fcstValue: string }) => item.fcstValue);
   } catch (error) {}
+};
+
+export const getPieData = async () => {
+  const apiUrl = process.env.REACT_APP_AIR_API_URL;
+  const apiKey = process.env.REACT_APP_AIR_API_KEY;
+  const queryParams = new URLSearchParams({
+    numOfRows: "100",
+    pageNo: "1",
+    dataTerm: "DAILY",
+    returnType: "json",
+  });
+  const stationName = await getAirInfo();
+  try {
+    const url = `${apiUrl}/getMsrstnAcctoRltmMesureDnsty?serviceKey=${apiKey}&${queryParams.toString()}&stationName=${stationName}`;
+    const response = await axios.get(url);
+    const { pm10Value, pm25Value, o3Value } =
+      response.data.response.body.items[0];
+    const pieObj = {
+      stationName: stationName,
+      data: [pm10Value, pm25Value, o3Value],
+    };
+    return pieObj;
+  } catch (error) {
+    console.error("Error fetching short weather:", error);
+  }
+};
+
+// 가장 가까운 공기 측정소 정보
+export const getAirInfo = () => {
+  const apiUrl = process.env.REACT_APP_AIR_STATION_API_URL;
+  const apiKey = process.env.REACT_APP_AIR_STATION_API_KEY;
+
+  return new Promise(async (resolve, reject) => {
+    if ("geolocation" in navigator) {
+      try {
+        const tmCoordinates = await getTMCoordinates();
+        const url = `${apiUrl}/getNearbyMsrstnList?serviceKey=${apiKey}&returnType=json&tmX=${tmCoordinates[0]}&tmY=${tmCoordinates[1]}`;
+        const response = await axios.get(url);
+        const stationName = response.data.response.body.items[0].stationName;
+        resolve(stationName);
+      } catch (error) {
+        console.error("Error:", error);
+        reject(error);
+      }
+    }
+  });
+};
+
+// [lat, lon] to TM cood
+const getTMCoordinates = (): Promise<number[]> => {
+  return new Promise((resolve, reject) => {
+    proj4.defs(
+      "TM",
+      "+proj=tmerc +lat_0=38.9 +lon_0=127.00289083333334 +k=1 +x_0=200000 +y_0=600000 +ellps=bessel +units=m +no_defs"
+    );
+
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        const tmCoordinates = proj4(proj4.defs["WGS84"], proj4.defs["TM"], [
+          lon,
+          lat,
+        ]);
+        resolve(tmCoordinates);
+      },
+      function (error) {
+        console.error("Error getting current position:", error);
+        reject(error);
+      }
+    );
+  });
 };
