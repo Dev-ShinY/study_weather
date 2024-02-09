@@ -64,3 +64,36 @@ export const getShortWeather = async (
     }
   }
 };
+
+// req temp (최저, 최고, 현재 기온 리턴)
+export const getTemp = async () => {
+  if (!apiUrl || !apiKey) {
+    throw new Error("API URL or API Key is not defined");
+  }
+  const queryParams = new URLSearchParams({
+    numOfRows,
+    pageNo,
+    base_date: baseDate,
+    base_time: "0200", // 최고/최저기온의 발표시간별 저장되는 예보자료 시간 : 0200
+    nx,
+    ny,
+    dataType,
+  });
+
+  // 측정 시간
+  const fcstTime = `${String(new Date().getHours()).padStart(2, "0")}00`;
+
+  try {
+    const url = `${apiUrl}/getVilageFcst?serviceKey=${apiKey}&${queryParams.toString()}`;
+    const response = await axios.get(url);
+    const data = response.data.response.body.items.item.filter(
+      (item: { fcstTime: string; fcstDate: string; category: string }) =>
+        (item.category === "TMN" && item.fcstDate === baseDate) ||
+        (item.category === "TMX" && item.fcstDate === baseDate) ||
+        (item.category === "TMP" &&
+          item.fcstTime === fcstTime &&
+          item.fcstDate === baseDate)
+    );
+    return data.map((item: { fcstValue: string }) => item.fcstValue);
+  } catch (error) {}
+};

@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import locationImage from "../../images/location.png";
 import { getGeoLoc } from "../../api/getGeoLoc";
 import { getAddress } from "../../api/getAddress";
+import { getTemp } from "../../api/getShortWeather";
 
 export default function Header() {
   const [loc, setLoc] = useState([0, 0]);
@@ -11,9 +12,7 @@ export default function Header() {
     "유성구",
     "상대동",
   ]); // dummy data
-  let temp = 0;
-  let low = 0;
-  let high = 0;
+  const [temp, setTemp] = useState<number[]>([]);
 
   // 위도, 경도
   const fetchLoc = useCallback(async () => {
@@ -26,8 +25,18 @@ export default function Header() {
     }
   }, []);
 
+  const fetchTemp = useCallback(async () => {
+    try {
+      const res = await getTemp();
+      setTemp(res);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
   useEffect(() => {
     fetchLoc();
+    fetchTemp();
   }, [fetchLoc]);
 
   return (
@@ -63,15 +72,15 @@ export default function Header() {
           <div className={clsx("flex", "flex-col", "mr-4")}>
             {/* 최저온도 */}
             <span className={clsx("text-blue-600", "font-semibold", "text-lg")}>
-              {temp}
+              {temp[0]}
             </span>
             {/* 최고온도 */}
             <span className={clsx("text-red-600", "font-semibold", "text-lg")}>
-              {low}
+              {temp[1]}
             </span>
           </div>
           {/* 현재온도 */}
-          <div className={clsx("font-semibold", "text-5xl")}>{high}°</div>
+          <div className={clsx("font-semibold", "text-5xl")}>{temp[2]}°</div>
         </div>
       </div>
     </div>

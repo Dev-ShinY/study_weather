@@ -59,13 +59,13 @@ export default function TodayWeather() {
         switch (skyCode) {
           case "1":
             parseInt(sunTime[0]) < nowTime && nowTime < parseInt(sunTime[1])
-              ? setWeatherCode(8)
-              : setWeatherCode(7);
+              ? setWeatherCode(7)
+              : setWeatherCode(8);
             break;
           case "3":
             parseInt(sunTime[0]) < nowTime && nowTime < parseInt(sunTime[1])
-              ? setWeatherCode(10)
-              : setWeatherCode(9);
+              ? setWeatherCode(9)
+              : setWeatherCode(10);
             break;
 
           case "4":
