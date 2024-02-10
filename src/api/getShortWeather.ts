@@ -114,8 +114,8 @@ export const getPieData = async () => {
     const response = await axios.get(url);
     const { pm10Value, pm25Value, o3Value } =
       response.data.response.body.items[0];
-    const pieObj = {
-      stationName: stationName,
+    const pieObj: { stationName: string; data: number[] } = {
+      stationName: stationName as string,
       data: [pm10Value, pm25Value, o3Value],
     };
     return pieObj;
