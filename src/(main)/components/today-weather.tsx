@@ -74,12 +74,8 @@ export default function TodayWeather() {
 
     try {
       const res = await getShortWeather();
-      const ptyCode = res.find(
-        (item) => item.fcstTime === fcstTime && item.category === "PTY"
-      )?.fcstValue;
-      const skyCode = res.find(
-        (item) => item.fcstTime === fcstTime && item.category === "SKY"
-      )?.fcstValue;
+      const ptyCode = res.find((item) => item.category === "PTY")?.fcstValue;
+      const skyCode = res.find((item) => item.category === "SKY")?.fcstValue;
       if (ptyCode !== "0") {
         setWeatherCode(parseInt(String(ptyCode)) - 1);
       } else {
@@ -140,7 +136,9 @@ export default function TodayWeather() {
           "items-center"
         )}
       >
-        <img src={weatherImages[weatherCode].image} alt="weatherImages" />
+        {weatherImages[weatherCode] && (
+          <img src={weatherImages[weatherCode].image} alt="weatherImages" />
+        )}
 
         <div
           className={clsx(
@@ -192,7 +190,8 @@ export default function TodayWeather() {
       <div
         className={clsx("mt-5", "text-gray-400", "tracking-wider", "text-xl")}
       >
-        {"현재 날씨는 " + weatherImages[weatherCode].title}
+        {weatherImages[weatherCode] &&
+          "현재 날씨는 " + weatherImages[weatherCode].title}
       </div>
     </div>
   );
