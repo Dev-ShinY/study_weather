@@ -1,5 +1,6 @@
 import axios from "axios";
 import proj4 from "proj4";
+import { getGeoLoc } from "./getGeoLoc";
 
 // api
 const apiUrl: string | undefined = process.env.REACT_APP_SHORT_WEATHER_API_URL;
@@ -12,9 +13,18 @@ const baseDate = new Date().toISOString().slice(0, 10).replace(/-/g, "");
 const baseTime = `${String(new Date().getHours()).padStart(2, "0")}${String(
   (Math.floor(new Date().getMinutes() / 30) - 1) * 30
 ).padStart(2, "0")}`;
-const nx = "55";
-const ny = "127";
 const dataType = "JSON";
+let nx = "38";
+let ny = "127";
+
+getGeoLoc()
+  .then((location) => {
+    nx = String(location[0]).split(".")[0]; // api 소수점까지 요청 시, 응답 거부
+    ny = String(location[1]).split(".")[0];
+  })
+  .catch((error) => {
+    console.error("위치 정보를 가져오는 동안 오류가 발생했습니다:", error);
+  });
 
 // url
 const generateApiUrl = (): string => {
