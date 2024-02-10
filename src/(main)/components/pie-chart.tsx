@@ -81,67 +81,78 @@ export default function PieChart() {
   };
 
   return (
-    <div
-      className={clsx(
-        "mt-10",
-        "flex",
-        "md:flex-col",
-        "justify-center",
-        "md:w-1/2",
-        "justify-between"
-      )}
-    >
-      {pieObj &&
-        [
-          { title: "초미세먼지(PM2.5)", unit: "㎍/m³", step: [15, 35, 75] },
-          { title: "미세먼지(PM10)", unit: "㎍/m³", step: [30, 80, 150] },
-          { title: "오존(O3)", unit: "ppm", step: [0.03, 0.09, 0.15] },
-        ].map((item, index) => {
-          return (
-            <div
-              className={clsx(
-                "px-5",
-                "py-10",
-                "bg-white",
-                "rounded-2xl",
-                "border",
-                "border-gray-200",
-                "w-[30%]",
-                "md:w-[100%]",
-                "md:mb-5",
-                "h-60",
-                "flex",
-                "flex-col",
-                "md:flex-row",
-                "justify-start",
-                "items-center"
-              )}
-              key={index}
-            >
-              {pieObj.data[index] && (
-                <>
-                  <div
-                    className={clsx(
-                      "w-[80%]",
-                      "h-[80%]",
-                      "md:flex",
-                      "justify-center"
-                    )}
-                  >
-                    <DonutChart value={pieObj?.data[index]} step={item.step} />
-                  </div>
-                  <div>
-                    <p className={clsx("text-center", "font-bold")}>
-                      {pieObj?.data[index] + item.unit}
-                    </p>
-                    <p className={clsx("p-1", "text-center")}>{item.title}</p>
-                  </div>
-                </>
-              )}
-              {!pieObj.data[index] && "Null"}
-            </div>
-          );
-        })}
+    <div className={clsx("md:w-1/2")}>
+      <div
+        className={clsx(
+          "mt-10",
+          "flex",
+          "md:flex-col",
+          "justify-center",
+          "md:w-full",
+          "justify-between"
+        )}
+      >
+        {pieObj &&
+          [
+            { title: "초미세먼지(PM2.5)", unit: "㎍/m³", step: [15, 35, 75] },
+            { title: "미세먼지(PM10)", unit: "㎍/m³", step: [30, 80, 150] },
+            { title: "오존(O3)", unit: "ppm", step: [0.03, 0.09, 0.15] },
+          ].map((item, index) => {
+            return (
+              <div
+                className={clsx(
+                  "px-5",
+                  "py-10",
+                  "bg-white",
+                  "rounded-2xl",
+                  "border",
+                  "border-gray-200",
+                  "w-[30%]",
+                  "md:w-[100%]",
+                  "md:mb-5",
+                  "h-60",
+                  "flex",
+                  "flex-col",
+                  "md:flex-row",
+                  "justify-start",
+                  "items-center"
+                )}
+                key={index}
+              >
+                {pieObj.data[index] && (
+                  <>
+                    <div
+                      className={clsx(
+                        "w-[80%]",
+                        "h-[80%]",
+                        "md:flex",
+                        "justify-center"
+                      )}
+                    >
+                      <DonutChart
+                        value={pieObj?.data[index]}
+                        step={item.step}
+                      />
+                    </div>
+                    <div>
+                      <p className={clsx("text-center", "font-bold")}>
+                        {pieObj?.data[index] + item.unit}
+                      </p>
+                      <p className={clsx("p-1", "text-center")}>{item.title}</p>
+                    </div>
+                  </>
+                )}
+                {!pieObj.data[index] && "Null"}
+              </div>
+            );
+          })}
+      </div>
+      <div className={clsx("font-thin", "text-xs", "mt-2", "md:text-right")}>
+        <p>※ 가까운 관측지점</p>
+        <p>
+          조회한 위치에서 가장 가까운 지점의 관측자료 : {pieObj?.stationName}
+        </p>
+      </div>
     </div>
   );
 }
