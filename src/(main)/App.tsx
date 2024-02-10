@@ -4,6 +4,7 @@ import clsx from "clsx";
 import Header from "./components/header";
 import TodayWeather from "./components/today-weather";
 import PieChart from "./components/pie-chart";
+import TempGraph from "./components/temp-graph";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <TodayWeather />
         <PieChart />
       </div>
+      <TempGraph />
     </div>
   );
 }
