@@ -107,6 +107,7 @@ export const getPieData = async () => {
     pageNo: "1",
     dataTerm: "DAILY",
     returnType: "json",
+    ver: "1.0",
   });
   const stationName = await getAirInfo();
   try {
