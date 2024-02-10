@@ -117,7 +117,7 @@ export const getPieData = async () => {
       response.data.response.body.items[0];
     const pieObj: { stationName: string; data: number[] } = {
       stationName: stationName as string,
-      data: [pm10Value, pm25Value, o3Value],
+      data: [pm25Value, pm10Value, o3Value],
     };
     return pieObj;
   } catch (error) {
