@@ -1,17 +1,6 @@
 import axios from "axios";
 import proj4 from "proj4";
 
-type WeatherItem = {
-  baseDate: string;
-  baseTime: string;
-  category: string;
-  fcstDate: string;
-  fcstTime: string;
-  fcstValue: string;
-  nx: number;
-  ny: number;
-};
-
 // api
 const apiUrl: string | undefined = process.env.REACT_APP_SHORT_WEATHER_API_URL;
 const apiKey: string | undefined = process.env.REACT_APP_SHORT_WEATHER_API_KEY;
@@ -171,4 +160,51 @@ const getTMCoordinates = (): Promise<number[]> => {
       }
     );
   });
+};
+
+// 실시간 기온 그래프 데이터
+export const getTempGraphData = async (
+  retryCount: number = 0
+): Promise<WeatherItem[]> => {
+  const baseTime =
+    new Date().getMinutes() <= 40
+      ? `${
+          String(new Date().getHours() - 1 - retryCount).padStart(2, "0") + "00"
+        }`
+      : `${String(new Date().getHours() - retryCount).padStart(2, "0") + "00"}`;
+
+  const queryParams = new URLSearchParams({
+    numOfRows,
+    pageNo,
+    base_date: baseDate,
+    base_time: baseTime,
+    nx,
+    ny,
+    dataType,
+  });
+
+  try {
+    const url = `${apiUrl}/getVilageFcst?serviceKey=${apiKey}&${queryParams.toString()}`;
+    const response = await axios.get(url);
+    const TempGraphData = response.data.response.body.items.item.filter(
+      (item: { category: string }) => item.category === "TMP"
+    );
+
+    return TempGraphData.map(
+      (item: { fcstDate: string; fcstTime: string }) => ({
+        ...item,
+        fcstTime:
+          item.fcstTime.slice(0, 2) + "시 (" + item.fcstDate.slice(-2) + "일)",
+      })
+    );
+  } catch (error) {
+    // Re-req
+    if (retryCount < 3) {
+      console.log("Retrying...");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      return getTempGraphData(retryCount + 1);
+    } else {
+      throw new Error("Maximum retry count exceeded.");
+    }
+  }
 };
