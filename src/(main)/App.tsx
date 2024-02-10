@@ -9,8 +9,10 @@ function App() {
   return (
     <div className={clsx("bg-gray-50", "min-h-screen", "p-5")}>
       <Header />
-      <TodayWeather />
-      <PieChart />
+      <div className={clsx("md:flex", "w-full")}>
+        <TodayWeather />
+        <PieChart />
+      </div>
     </div>
   );
 }

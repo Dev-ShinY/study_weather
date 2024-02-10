@@ -120,7 +120,8 @@ export default function TodayWeather() {
         "flex-col",
         "items-center",
         "justify-center",
-        "relative"
+        "relative",
+        "md:w-1/2"
       )}
     >
       <div
@@ -141,7 +142,17 @@ export default function TodayWeather() {
       >
         <img src={weatherImages[weatherCode].image} alt="weatherImages" />
 
-        <div className={clsx("absolute", "right-10")}>
+        <div
+          className={clsx(
+            "absolute",
+            "right-10",
+            "md:top-[70%]",
+            "md:right-0",
+            "md:flex",
+            "md:justify-around",
+            "md:w-full"
+          )}
+        >
           <div
             className={clsx(
               "font-thin",
@@ -150,6 +161,7 @@ export default function TodayWeather() {
               "px-5",
               "py-3",
               "mb-5",
+              "md:mb-0",
               "shadow-sm"
             )}
             style={{ background: "rgba(255, 255, 255, 0.9)" }}

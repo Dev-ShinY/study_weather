@@ -81,56 +81,67 @@ export default function PieChart() {
   };
 
   return (
-    <div>
-      <div
-        className={clsx(
-          "mt-10",
-          "flex",
-          "justify-center",
-          "w-full",
-          "justify-between"
-        )}
-      >
-        {pieObj &&
-          [
-            { title: "초미세먼지(PM2.5)", unit: "㎍/m³", step: [15, 35, 75] },
-            { title: "미세먼지(PM10)", unit: "㎍/m³", step: [30, 80, 150] },
-            { title: "오존(O3)", unit: "ppm", step: [0.03, 0.09, 0.15] },
-          ].map((item, index) => {
-            return (
-              <div
-                className={clsx(
-                  "px-5",
-                  "py-10",
-                  "bg-white",
-                  "rounded-2xl",
-                  "border",
-                  "border-gray-200",
-                  "w-[30%]",
-                  "h-60",
-                  "flex",
-                  "flex-col",
-                  "justify-start",
-                  "items-center"
-                )}
-                key={index}
-              >
-                {pieObj.data[index] && (
-                  <>
+    <div
+      className={clsx(
+        "mt-10",
+        "flex",
+        "md:flex-col",
+        "justify-center",
+        "md:w-1/2",
+        "justify-between"
+      )}
+    >
+      {pieObj &&
+        [
+          { title: "초미세먼지(PM2.5)", unit: "㎍/m³", step: [15, 35, 75] },
+          { title: "미세먼지(PM10)", unit: "㎍/m³", step: [30, 80, 150] },
+          { title: "오존(O3)", unit: "ppm", step: [0.03, 0.09, 0.15] },
+        ].map((item, index) => {
+          return (
+            <div
+              className={clsx(
+                "px-5",
+                "py-10",
+                "bg-white",
+                "rounded-2xl",
+                "border",
+                "border-gray-200",
+                "w-[30%]",
+                "md:w-[100%]",
+                "md:mb-5",
+                "h-60",
+                "flex",
+                "flex-col",
+                "md:flex-row",
+                "justify-start",
+                "items-center"
+              )}
+              key={index}
+            >
+              {pieObj.data[index] && (
+                <>
+                  <div
+                    className={clsx(
+                      "w-[80%]",
+                      "h-[80%]",
+                      "md:flex",
+                      "justify-center"
+                    )}
+                  >
                     <DonutChart value={pieObj?.data[index]} step={item.step} />
-                    <div>
-                      <p className={clsx("text-center", "font-bold")}>
-                        {pieObj?.data[index] + item.unit}
-                      </p>
-                      <p className={clsx("p-1", "text-center")}>{item.title}</p>
-                    </div>
-                  </>
-                )}
-                {!pieObj.data[index] && "Null"}
-              </div>
-            );
-          })}
-      </div>
+                  </div>
+                  <div>
+                    <p className={clsx("text-center", "font-bold")}>
+                      {pieObj?.data[index] + item.unit}
+                    </p>
+                    <p className={clsx("p-1", "text-center")}>{item.title}</p>
+                  </div>
+                </>
+              )}
+              {!pieObj.data[index] && "Null"}
+            </div>
+          );
+        })}
     </div>
   );
 }
