@@ -71,19 +71,22 @@ export const getTemp = async () => {
   });
 
   // 측정 시간
-  const fcstTime = `${String(new Date().getHours()).padStart(2, "0")}00`;
-
   try {
     const url = `${apiUrl}/getVilageFcst?serviceKey=${apiKey}&${queryParams.toString()}`;
     const response = await axios.get(url);
     const data = response.data.response.body.items.item.filter(
       (item: { fcstTime: string; fcstDate: string; category: string }) =>
         (item.category === "TMN" && item.fcstDate === baseDate) ||
-        (item.category === "TMX" && item.fcstDate === baseDate) ||
-        (item.category === "TMP" &&
-          item.fcstTime === fcstTime &&
-          item.fcstDate === baseDate)
+        (item.category === "TMX" && item.fcstDate === baseDate)
     );
+
+    const tmp = response.data.response.body.items.item.filter(
+      (item: { category: string; fcstDate: string }) =>
+        item.category === "TMP" && item.fcstDate === baseDate
+    );
+
+    data.push(tmp[0]);
+
     return data.map((item: { fcstValue: string }) => item.fcstValue);
   } catch (error) {}
 };
