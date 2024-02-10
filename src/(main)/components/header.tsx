@@ -7,11 +7,7 @@ import { getTemp } from "../../api/getShortWeather";
 
 export default function Header() {
   const [loc, setLoc] = useState([0, 0]);
-  const [address, setAddress] = useState<string[]>([
-    "대전광역시",
-    "유성구",
-    "상대동",
-  ]); // dummy data
+  const [address, setAddress] = useState<string[]>(["", "", ""]);
   const [temp, setTemp] = useState<number[]>([]);
 
   // 위도, 경도
@@ -19,9 +15,11 @@ export default function Header() {
     try {
       const res = await getGeoLoc();
       setLoc(res);
-      setAddress(await getAddress(loc[0], loc[1]));
+      const addressData = await getAddress(res[0], res[1]);
+      setAddress(addressData);
     } catch (error) {
       setLoc([37.5796, 126.977]);
+      setAddress(["대전광역시", "유성구", "상대동"]);
     }
   }, []);
 
